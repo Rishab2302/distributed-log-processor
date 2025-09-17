@@ -3,6 +3,7 @@ Configuration for the log generator service.
 """
 import os
 
+
 # Default configuration values
 DEFAULT_CONFIG = {
     "LOG_RATE": 5,  # Logs per second
@@ -35,3 +36,23 @@ for log_type in config["LOG_TYPES"]:
         LOG_DISTRIBUTION[log_type] = int(os.environ.get(env_key, 0))
 
 config["LOG_DISTRIBUTION"] = LOG_DISTRIBUTION
+
+# Add to DEFAULT_CONFIG
+DEFAULT_CONFIG.update({
+    "LOG_FORMAT": "text",  # Options: "text", "json", "csv"
+    "SERVICES": ["user-service", "payment-service", "inventory-service", "notification-service"],
+    "ENABLE_BURSTS": True,
+    "BURST_FREQUENCY": 0.05,  # 5% chance of burst per second
+    "BURST_MULTIPLIER": 5,    # 5x normal rate during burst
+    "BURST_DURATION": 3       # 3 seconds per burst
+})
+
+# Update config loading for new options
+config.update({
+    "LOG_FORMAT": os.environ.get("LOG_FORMAT", DEFAULT_CONFIG["LOG_FORMAT"]),
+    "SERVICES": os.environ.get("SERVICES", ",".join(DEFAULT_CONFIG["SERVICES"])).split(","),
+    "ENABLE_BURSTS": os.environ.get("ENABLE_BURSTS", str(DEFAULT_CONFIG["ENABLE_BURSTS"])).lower() == "true",
+    "BURST_FREQUENCY": float(os.environ.get("BURST_FREQUENCY", DEFAULT_CONFIG["BURST_FREQUENCY"])),
+    "BURST_MULTIPLIER": int(os.environ.get("BURST_MULTIPLIER", DEFAULT_CONFIG["BURST_MULTIPLIER"])),
+    "BURST_DURATION": float(os.environ.get("BURST_DURATION", DEFAULT_CONFIG["BURST_DURATION"]))
+})
