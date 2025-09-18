@@ -1,6 +1,7 @@
 import json
 import csv
 import io
+import os
 import time
 import random
 from datetime import datetime
@@ -14,6 +15,20 @@ class LogGenerator:
         self.burst_end_time = 0
         self.user_sessions = {}  # Track user sessions
         
+    def ensure_log_directory(self):
+        """Make sure the log directory exists."""
+        log_dir = os.path.dirname(self.config["OUTPUT_FILE"])
+        if log_dir and not os.path.exists(log_dir):
+            os.makedirs(log_dir, exist_ok=True)
+    
+    def _select_log_type(self):
+        """Select a log type based on the configured distribution."""
+        distribution = self.config["LOG_DISTRIBUTION"]
+        types = list(distribution.keys())
+        weights = list(distribution.values())
+        
+        return random.choices(types, weights=weights, k=1)[0]
+    
     def generate_log_message(self):
         """Generate a random log message with additional fields."""
         # Select log type based on distribution
@@ -142,6 +157,17 @@ class LogGenerator:
             return random.choice(messages[log_type])
         else:
             return f"Sample log message for {log_type}"
+    
+    def write_log(self, log_entry):
+        """Write a log entry to the configured outputs."""
+        # Write to file if configured
+        if self.config["OUTPUT_FILE"]:
+            with open(self.config["OUTPUT_FILE"], "a") as f:
+                f.write(log_entry + "\n")
+        
+        # Write to console if configured
+        if self.config["CONSOLE_OUTPUT"]:
+            print(log_entry)
     
     def run(self, duration=None):
         """Run the log generator with burst mode support."""

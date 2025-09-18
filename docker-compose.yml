@@ -1,36 +1,43 @@
-version: '3'
+version: '3.8'
 
 services:
   logger:
     build:
       context: ./src/services/logger
+    container_name: log-processor-logger
     volumes:
       - ./src/services/logger:/app
-      - ./logs:/logs  # Mount a volume for persistent logs
+      - ./logs:/logs
     ports:
-      - "8000:8000"  # Original port
-      - "8080:8080"  # Web interface port
+      - "8000:8000"
+      - "8080:8080"
     environment:
       - LOG_LEVEL=INFO
       - LOG_FREQUENCY=5.0
       - LOG_TO_FILE=true
       - LOG_FILE_PATH=/logs/logger.log
       - LOG_MAX_SIZE_MB=1.0
-      - WEB_HOST=0.0.0.0
-      - WEB_PORT=8080
       - MAX_LOGS_TO_DISPLAY=100
+
   log-generator:
     build:
       context: ./src/services/log-generator
+    container_name: log-processor-generator
     volumes:
-    - ./src/services/log-generator:/app
-    - ./logs:/logs
+      - ./src/services/log-generator:/app
+      - ./logs:/logs
     environment:
-    - LOG_RATE=10
-    - CONSOLE_OUTPUT=true
-    - OUTPUT_FILE=/logs/generated_logs.log
-    - LOG_FORMAT=json
-    - ENABLE_BURSTS=true
-    - BURST_FREQUENCY=0.1
-    - BURST_MULTIPLIER=5
-    - BURST_DURATION=3  
+      - LOG_RATE=10
+      - CONSOLE_OUTPUT=true
+      - OUTPUT_FILE=/logs/generated_logs.log
+      - LOG_FORMAT=json
+      - ENABLE_BURSTS=true
+      - BURST_FREQUENCY=0.1
+      - BURST_MULTIPLIER=5
+      - BURST_DURATION=3
+    depends_on:
+      - logger
+
+volumes:
+  logs:
+    name: log-processor-logs
