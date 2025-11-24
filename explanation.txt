@@ -1,0 +1,79 @@
+EXPLANATION.TXT - Learning Guide for Distributed Logger Phase 1
+================================================================
+
+OVERVIEW:
+This phase transforms a basic logger into a configurable, persistent, and web-accessible distributed logging system.
+
+WHAT WE'RE BUILDING AND WHY:
+============================
+
+1. CONFIGURATION SYSTEM (config.py)
+   WHAT: Centralized configuration management
+   WHY: In distributed systems, configuration should be externalized and easily changeable
+   LEARNING: This teaches separation of concerns and the 12-factor app principle of storing config in environment
+
+   KEY CONCEPTS:
+   - Log levels hierarchy (DEBUG < INFO < WARNING < ERROR < CRITICAL)
+   - Configurable timing prevents hardcoded values
+   - Format strings allow customizable output
+
+2. PERSISTENT LOG STORAGE
+   WHAT: Logs written to both console and persistent files
+   WHY: Console logs are ephemeral; file logs survive container restarts
+   LEARNING: Data persistence in containerized environments
+
+   KEY CONCEPTS:
+   - Docker volumes map container directories to host filesystem
+   - Log rotation prevents disk space issues in production
+   - Dual output (console + file) supports both development and production needs
+
+3. LOG ROTATION MECHANISM
+   WHAT: Automatic creation of new log files when size exceeds 1MB
+   WHY: Prevents single large files that become unmanageable
+   LEARNING: Resource management and operational considerations
+
+   KEY CONCEPTS:
+   - File size monitoring
+   - Automatic file naming with timestamps
+   - Resource conservation in long-running services
+
+4. WEB INTERFACE
+   WHAT: HTTP endpoint to view logs and configuration
+   WHY: Provides human-readable access to system state
+   LEARNING: Service interfaces and observability
+
+   KEY CONCEPTS:
+   - REST API principles
+   - Service observability
+   - Multiple interface types (console, file, web)
+
+5. DOCKER INTEGRATION
+   WHAT: Volume mapping and port exposure
+   WHY: Container orchestration and data persistence
+   LEARNING: Container networking and storage patterns
+
+   KEY CONCEPTS:
+   - Volume mounting for persistence
+   - Port mapping for service access
+   - Container-to-host communication
+
+DISTRIBUTED SYSTEMS PRINCIPLES DEMONSTRATED:
+===========================================
+- OBSERVABILITY: Multiple ways to view system state
+- PERSISTENCE: Data survives service restarts
+- CONFIGURATION: External configuration management
+- INTERFACES: Multiple access methods (console, file, web)
+- RESOURCE MANAGEMENT: Log rotation prevents resource exhaustion
+
+SYSTEM ARCHITECTURE BENEFITS:
+============================
+- MODULARITY: Each component has a specific responsibility
+- SCALABILITY: Configuration allows easy tuning
+- MAINTAINABILITY: Clear separation of concerns
+- OPERABILITY: Web interface simplifies monitoring
+
+This foundation prepares for more advanced distributed concepts like:
+- Service discovery
+- Load balancing
+- Inter-service communication
+- Centralized logging aggregation

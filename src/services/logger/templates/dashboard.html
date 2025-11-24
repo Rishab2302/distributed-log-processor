@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Distributed Logger Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <meta http-equiv="refresh" content="5">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Distributed Logger Dashboard</h1>
+            <div class="status-indicator">
+                <span class="status-dot"></span>
+                <span>Service Active</span>
+            </div>
+        </header>
+
+        <main>
+            <section class="config-section">
+                <h2>Current Configuration</h2>
+                <div class="config-grid">
+                    <div class="config-item">
+                        <label>Log Level:</label>
+                        <span class="config-value">{{ config.log_level }}</span>
+                    </div>
+                    <div class="config-item">
+                        <label>Log Frequency:</label>
+                        <span class="config-value">{{ config.log_frequency }}s</span>
+                    </div>
+                    <div class="config-item">
+                        <label>Max File Size:</label>
+                        <span class="config-value">{{ config.max_file_size_mb }}MB</span>
+                    </div>
+                    <div class="config-item">
+                        <label>Web Port:</label>
+                        <span class="config-value">{{ config.web_port }}</span>
+                    </div>
+                    <div class="config-item">
+                        <label>Log File Path:</label>
+                        <span class="config-value">{{ config.log_file_path }}</span>
+                    </div>
+                    <div class="config-item">
+                        <label>Total Logs in Cache:</label>
+                        <span class="config-value">{{ log_count }}</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="logs-section">
+                <h2>Recent Logs (Last {{ logs|length }})</h2>
+                <div class="logs-container">
+                    {% for log in logs %}
+                    <div class="log-entry {{ log.level }}">
+                        <div class="log-header">
+                            <span class="log-timestamp">{{ log.timestamp }}</span>
+                            <span class="log-level-badge">{{ log.level }}</span>
+                        </div>
+                        <div class="log-message">{{ log.message }}</div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div class="footer-content">
+                <p>Distributed Log Processor | Auto-refresh: 5s</p>
+                <div class="api-links">
+                    <a href="/api/logs" class="api-link">JSON Logs</a>
+                    <a href="/api/config" class="api-link">JSON Config</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

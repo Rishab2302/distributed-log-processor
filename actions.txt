@@ -1,0 +1,47 @@
+ACTIONS.TXT - Build Prompts for Distributed Logger Phase 1
+
+PHASE 1: Extending Distributed Logger
+===========================================
+
+USER PROMPT: Create a distributed logger enhancement with the following requirements:
+
+1. CREATE CONFIGURATION FILE
+   - Build config.py file in logger service directory
+   - Define log levels (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+   - Add configurable log format options
+   - Include setting for log frequency (replace hardcoded 5 seconds)
+
+2. IMPLEMENT LOG FILE OUTPUT
+   - Modify logger service to write logs to both console AND file
+   - Create Docker volume mapping to persist logs on host machine
+   - Implement log rotation (new file when size exceeds 1MB)
+
+3. ADD SIMPLE WEB INTERFACE
+   - Create minimal web interface
+   - Display most recent logs
+   - Show current configuration
+   - Run on port 8080
+
+4. DOCUMENT CHANGES
+   - Update README.md file
+   - Explain new features
+   - Add instructions for accessing web interface
+   - Document available configuration options
+
+5. TESTING REQUIREMENTS
+   - Test complete system functionality
+   - Verify Docker volume persistence
+   - Verify log rotation works
+   - Verify web interface displays logs and config
+
+EXTENSION CHALLENGE (OPTIONAL):
+   - Implement second service that generates random log events
+   - Make logger service receive and process these events
+   - Document how two services work together
+
+EVALUATION CRITERIA:
+   - Clean, well-commented code
+   - Proper use of Docker volumes for persistence
+   - Correct implementation of configuration options
+   - Working web interface
+   - Updated documentation

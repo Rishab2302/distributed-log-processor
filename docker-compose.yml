@@ -1,0 +1,17 @@
+services:
+  # Enhanced logger service with persistence and web interface
+  logger:
+    build:
+      context: ./src/services/logger
+    volumes:
+      - ./src/services/logger:/app
+      - ./data/logs:/app/logs
+    ports:
+      - "8000:8000"
+      - "8080:8080"
+    environment:
+      - LOG_LEVEL=INFO
+      - LOG_FREQUENCY=3.0
+      - LOG_FILE_PATH=/app/logs/app.log
+      - MAX_FILE_SIZE_MB=1
+      - WEB_PORT=8080
